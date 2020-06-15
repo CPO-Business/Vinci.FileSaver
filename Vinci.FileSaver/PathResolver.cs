@@ -11,13 +11,12 @@ namespace Vinci.FileSaver
         public string GetPathId()
         {
             var now = DateTime.UtcNow;
-        return now.ToString("yyyy-MM-dd-mm-ss-") $"{now.Year}-{now.Month}-{now.}"
-            return string.Empty;
+            return now.ToString("yyyy-MM-dd.HHmmssfff");
         }
 
         public DirectoryInfo GetDictionary(DirectoryInfo root, string Id)
         {
-            var subPath = Id.Replace('-', '\\');
+            var subPath = Id.Split('.')[0].Replace('-', '\\');
             return Directory.CreateDirectory(Path.Combine(root.FullName, subPath));
         }
     }
