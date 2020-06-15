@@ -35,8 +35,6 @@ namespace Test.Vinci.FileSaver
             var img = Storage.Local.GetImage(id);
             Assert.AreEqual(stream.Width, img.Width);
             Assert.AreEqual(stream.Height, img.Height);
-            var f1 = stream.RawFormat;
-            var f2 = img.RawFormat;
             Assert.AreEqual(stream.RawFormat, img.RawFormat);
             Assert.Pass();
         }
@@ -50,8 +48,6 @@ namespace Test.Vinci.FileSaver
             var img = Storage.Local.GetImage(id);
             Assert.AreEqual(stream.Width, img.Width);
             Assert.AreEqual(stream.Height, img.Height);
-            var f1 = stream.RawFormat;
-            var f2 = img.RawFormat;
             Assert.AreEqual(stream.RawFormat, img.RawFormat);
             Assert.Pass();
         }

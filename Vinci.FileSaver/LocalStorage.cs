@@ -52,10 +52,7 @@ namespace Vinci.FileSaver
             var files = dir.GetFiles($"{id}.*");
             if (files.Length > 0)
             {
-                
-                var origin = Image.FromFile(files[0].FullName);
-                var f = origin.RawFormat;
-                return (Image)origin.Clone();
+                return (Image)Image.FromFile(files[0].FullName).Clone();
             }
             return null;
         }
