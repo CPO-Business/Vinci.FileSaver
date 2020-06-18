@@ -15,6 +15,21 @@ namespace Vinci.FileSaver
             RootDirectory = Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location), "LStorage\\"));
         }
 
+        private ImageFormat GetImgFormat(Image img, string extension)
+        {
+            var format = img.RawFormat;
+            switch (extension)
+            {
+                case "icon":
+                case "ico":
+                    format = ImageFormat.Icon;
+                    break;
+                default:
+                    break;
+            }
+            return format;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -30,16 +45,7 @@ namespace Vinci.FileSaver
             }
             var id = pathResolver.GetPathId();
             var dir = pathResolver.GetDictionary(RootDirectory, id);
-            var format = img.RawFormat;
-            switch (extension)
-            {
-                case "icon":
-                case "ico":
-                    format = ImageFormat.Icon;
-                    break;
-                default:
-                    break;
-            }
+            var format = GetImgFormat(img, extension);
             img.Save(Path.Combine(dir.FullName, $"{id}.{extension}"), format);
             return id;
         }
@@ -52,12 +58,37 @@ namespace Vinci.FileSaver
             var files = dir.GetFiles($"{id}.*");
             if (files.Length > 0)
             {
-                return (Image)Image.FromFile(files[0].FullName).Clone();
+                Image im;
+                using (var fs = new FileStream(files[0].FullName, FileMode.Open, FileAccess.Read)) { 
+                    fs.Seek(0, SeekOrigin.Begin);
+                    var ms = new MemoryStream();
+                        fs.CopyTo(ms);
+                 im = Image.FromStream(ms);
+                }
+                return im;
             }
             return null;
         }
 
-
+        public bool UpdateImage(string id, Image img, string extension, DirectoryInfo rootDir = null)
+        {
+            if (rootDir != null)
+            {
+                RootDirectory = rootDir;
+            }
+            var dir = pathResolver.GetDictionary(RootDirectory, id);
+            var files = dir.GetFiles($"{id}.*");
+            var oldPath = "";
+            if (files.Length > 0)
+            {
+                files[0].MoveTo(oldPath = (files[0].FullName + ".old"));
+                //files[0].Delete();
+            }
+            var format = GetImgFormat(img, extension);
+            img.Save(Path.Combine(dir.FullName, $"{id}.{extension}"), format);
+            File.Delete(oldPath);
+            return true;
+        }
         private string SaveFile(Stream img, string extension, DirectoryInfo rootDir = null)
         {
             if (rootDir != null)

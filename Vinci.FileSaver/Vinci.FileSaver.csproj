@@ -1,14 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-	  <Description>
-		  the dll can help developer saving files, image, and can geting files by id returned from saving function.
-	  </Description>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
-  </ItemGroup>
-
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Description>
+			the dll can help developer saving files, image, and can geting files by id returned from saving function.
+		</Description>
+		<Authors>
+			Quick Xavier
+		</Authors>
+	</PropertyGroup>
+	<Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
+		<ItemGroup>
+			<None Include="**\*.cs" Pack="True" PackagePath="src" />
+		</ItemGroup>
+	</Target>
+	<ItemGroup>
+		<PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+	</ItemGroup>
 </Project>
