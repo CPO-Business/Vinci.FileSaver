@@ -1,5 +1,7 @@
 using NUnit.Framework;
+using System;
 using System.Drawing;
+using System.IO;
 using System.Runtime.CompilerServices;
 using Vinci.FileSaver;
 
@@ -92,6 +94,46 @@ namespace Test.Vinci.FileSaver
             Assert.AreEqual(stream.Height, img.Height);
             Assert.AreEqual(stream.RawFormat, img.RawFormat);
 
+            Assert.Pass();
+        }
+
+        [Test]
+        public void SaveImgCostom()
+        {
+            var dir = new DirectoryInfo("123");
+            string path;
+            using (var stream = Image.FromFile("100-2.bmp"))
+            {
+                //"bmp\\" + Guid.NewGuid()
+                path = Storage.Local.SaveImage(stream, "bmp", dir, "bmp\\" + Guid.NewGuid());
+
+                Assert.IsNotEmpty(path);
+
+                var img = Storage.Local.GetImage(path, dir);
+                Assert.AreEqual(stream.Width, img.Width);
+                Assert.AreEqual(stream.Height, img.Height);
+                Assert.AreEqual(stream.RawFormat, img.RawFormat);
+            }
+            Assert.Pass();
+        }
+
+        [Test]
+        public void UpdateImageCostom()
+        {
+            var dir = new DirectoryInfo("123");
+            string path;
+            using (var stream = Image.FromFile("100-2.bmp"))
+            {
+                path = Storage.Local.SaveImage(stream, "bmp", dir, "bmp\\" + Guid.NewGuid());
+            }
+            using (var stream = Image.FromFile("updating.bmp"))
+            {
+                Storage.Local.UpdateImage(path, stream, "bmp", dir);
+                var img = Storage.Local.GetImage(path, dir);
+                Assert.AreEqual(stream.Width, img.Width);
+                Assert.AreEqual(stream.Height, img.Height);
+                Assert.AreEqual(stream.RawFormat, img.RawFormat);
+            }
             Assert.Pass();
         }
     }

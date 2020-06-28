@@ -38,4 +38,10 @@
     <ProjectReference Include="..\Vinci.FileSaver\Vinci.FileSaver.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="updating.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
