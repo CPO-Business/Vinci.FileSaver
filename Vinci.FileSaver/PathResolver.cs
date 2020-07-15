@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Vinci.FileSaver.Interface;
 
 namespace Vinci.FileSaver
 {
-    class PathResolver
+    class PathResolver : IPathResolver
     {
         public string GetPathId()
         {

@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.CompilerServices;
 using Vinci.FileSaver;
@@ -39,7 +40,8 @@ namespace Test.Vinci.FileSaver
             var img = Storage.Local.GetImage(id);
             Assert.AreEqual(stream.Width, img.Width);
             Assert.AreEqual(stream.Height, img.Height);
-            Assert.AreEqual(stream.RawFormat, img.RawFormat);
+            //ico is png actually
+            Assert.AreEqual(ImageFormat.Png, img.RawFormat);
             Assert.Pass();
         }
         [Test]
@@ -72,7 +74,7 @@ namespace Test.Vinci.FileSaver
         }
 
         [Test]
-        public void Update()
+        public void UpdateImage()
         {
             if (string.IsNullOrWhiteSpace(idToUpdate))
             {
@@ -136,6 +138,67 @@ namespace Test.Vinci.FileSaver
             }
             Assert.Pass();
         }
+
+        [Test]
+        public void Get_SaveFile()
+        {
+            string path;
+            using (var fs = new FileStream("100-2.bmp", FileMode.Open, FileAccess.Read))
+            {
+                var id = Storage.Local.SaveFile(fs, "bmp");
+                using (var sFs = Storage.Local.GetFile(id))
+                {
+                    Assert.AreEqual(fs.Length, sFs.Length);
+                }
+                var dir = new DirectoryInfo("123");
+                fs.Seek(0, SeekOrigin.Begin);
+                id = Storage.Local.SaveFile(fs, "bmp", dir, "file\\" + Guid.NewGuid());
+                using (var sFs = Storage.Local.GetFile(id, dir))
+                {
+                    Assert.AreEqual(fs.Length, sFs.Length);
+                }
+            }
+            Assert.Pass();
+        }
+        [Test]
+        public void MoveFile()
+        {
+            string id;
+            using (var fs = new FileStream("100-2.bmp", FileMode.Open, FileAccess.Read))
+            {
+                id = Storage.Local.SaveFile(fs, "bmp");
+                var otherId = Storage.PathHelper.GetPathId();
+                Storage.Local.MoveFile(id, $"id:{otherId}");
+                Assert.Throws(typeof(FileNotFoundException), new TestDelegate(() => { Storage.Local.GetFile(id); }));
+                using (var sFs2 = Storage.Local.GetFile(otherId))
+                {
+                    Assert.AreEqual(sFs2.Length, fs.Length);
+                }
+            }
+
+            Assert.Pass();
+        }
+
+        [Test]
+        public void CopyFile()
+        {
+            string id;
+            using (var fs = new FileStream("100-2.bmp", FileMode.Open, FileAccess.Read))
+            {
+                id = Storage.Local.SaveFile(fs, "bmp");
+            }
+            var otherId = Storage.PathHelper.GetPathId();
+            Storage.Local.CopyFile(id, otherId);
+            using (var sFs = Storage.Local.GetFile(id))
+            {
+                using (var sFs2 = Storage.Local.GetFile(otherId))
+                {
+                    Assert.AreEqual(sFs2.Length, sFs.Length);
+                }
+            }
+            Assert.Pass();
+        }
+
     }
 
 }
