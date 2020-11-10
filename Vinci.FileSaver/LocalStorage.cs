@@ -309,7 +309,34 @@ namespace Vinci.FileSaver
             return true;
         }
 
+        /// <summary>
+        /// file with id exist
+        /// </summary>
+        /// <param name="idOrPath"></param>
+        /// <param name="rootDir"></param>
+        /// <returns></returns>
+        public bool Exist(string idOrPath,  DirectoryInfo rootDir = null)
+        {
+            var dir = RootDirectory;
+            if (rootDir != null)
+            {
+                dir = rootDir;
+            }
+            FileInfo[] files;
+            string realName;
+            if (idOrPath.StartsWith("path:"))
+            {
+                realName = idOrPath.Substring(5);
+            }
+            else
+            {
+                realName = idOrPath.StartsWith("id:") ? idOrPath.Substring(3) : idOrPath;
+                dir = Storage.PathHelper.GetDictionary(dir, realName);
+            }
+            files = dir.GetFiles($"{realName}.*");
+            return files.Length > 0;
 
+        }
 
 
         //public void SetRootDirectory(DirectoryInfo dir)

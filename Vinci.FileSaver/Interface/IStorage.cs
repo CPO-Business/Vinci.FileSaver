@@ -72,5 +72,14 @@ namespace Vinci.FileSaver.Interface
         /// <param name="rootDir"></param>
         /// <returns></returns>
         bool UpdateImage(string idOrPath, Image img, string extension, DirectoryInfo rootDir = null);
+
+
+        /// <summary>
+        /// file with id exist
+        /// </summary>
+        /// <param name="idOrPath"></param>
+        /// <param name="rootDir"></param>
+        /// <returns></returns>
+        bool Exist(string idOrPath, DirectoryInfo rootDir = null);
     }
 }
