@@ -12,9 +12,8 @@ namespace Vinci.FileSaver
         public static IPathResolver PathHelper { get => pathResolver ?? (pathResolver = new PathResolver()); }
         static LocalStorage local;
         public static IStorage Local { get => local ?? (local = new LocalStorage()); }
+        static FTPBuilder ftp;
+        public static FTPBuilder FTP { get => ftp ?? (ftp = new FTPBuilder()); }
 
-
-
-        //public static IStorage Remote { get; set; }
     }
 }

@@ -9,5 +9,6 @@ namespace Vinci.FileSaver.Interface
     {
         string GetPathId();
         DirectoryInfo GetDictionary(DirectoryInfo root, string Id);
+        string GetDictionary(string root, string Id);
     }
 }

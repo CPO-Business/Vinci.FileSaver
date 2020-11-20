@@ -18,7 +18,13 @@ namespace Vinci.FileSaver
         public DirectoryInfo GetDictionary(DirectoryInfo root, string Id)
         {
             var subPath = Id.Split('.')[0].Replace('-', '\\');
-            return Directory.CreateDirectory(Path.Combine(root.FullName, subPath));
+            return new DirectoryInfo(Path.Combine(root.FullName, subPath));
+        }
+
+        public string GetDictionary(string root, string Id)
+        {
+            var subPath = Id.Split('.')[0].Replace('-', '\\');
+            return Path.Combine(root, subPath);
         }
     }
 }

@@ -145,7 +145,7 @@ namespace Vinci.FileSaver
         /// <param name="idOrPath"></param>
         /// <param name="rootDir"></param>
         /// <returns>FileStream 需要用户自己释放</returns>
-        public FileStream GetFile(string idOrPath, DirectoryInfo rootDir = null)
+        public Stream GetFile(string idOrPath, DirectoryInfo rootDir = null)
         {
             var dir = RootDirectory;
             if (rootDir != null)

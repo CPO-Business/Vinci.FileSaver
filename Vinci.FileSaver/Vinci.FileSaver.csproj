@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>netstandard2.1</TargetFramework>
 		<Description>
 			the dll can help developer saving files, image, and can geting files by id returned from saving function.
 		</Description>
@@ -15,6 +15,7 @@
 		</ItemGroup>
 	</Target>
 	<ItemGroup>
+		<PackageReference Include="FluentFTP" Version="33.0.2" />
 		<PackageReference Include="System.Drawing.Common" Version="4.7.0" />
 	</ItemGroup>
 </Project>
