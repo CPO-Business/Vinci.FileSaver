@@ -17,6 +17,11 @@ namespace Vinci.FileSaver
             throw new NotImplementedException();
         }
 
+        public void Dispose()
+        {
+            Client.Disconnect();
+        }
+
         public bool Exist(string idOrPath, DirectoryInfo rootDir = null)
         {
             throw new NotImplementedException();
@@ -28,7 +33,7 @@ namespace Vinci.FileSaver
             var dir = new DirectoryInfo(".");
             string relativePath = "";
             if (rootDir != null)
-                relativePath = Path.GetRelativePath(dir.FullName, rootDir.FullName);
+                relativePath = rootDir.FullName.Replace(dir.FullName, "");// Path.GetRelativePath(dir.FullName, rootDir.FullName);
 
             string realName;
             if (idOrPath.StartsWith("path:"))
@@ -79,7 +84,7 @@ namespace Vinci.FileSaver
             string relativePath = "";
             if (rootDir != null)
             {
-                relativePath = Path.GetRelativePath(dir.FullName, rootDir.FullName);
+                relativePath = rootDir.FullName.Replace(dir.FullName, "");// Path.GetRelativePath(dir.FullName, rootDir.FullName);
             }
 
             if (string.IsNullOrWhiteSpace(filePath))

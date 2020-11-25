@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Vinci.FileSaver.Interface
 {
-    public interface IStorage
+    public interface IStorage:IDisposable
     {
         /// <summary>
         /// 保存图片，如果要自定义保存文件名称

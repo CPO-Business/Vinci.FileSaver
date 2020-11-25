@@ -10,17 +10,19 @@ namespace Test.Vinci.FileSaver
 {
     public class FTPUnit
     {
-        private IStorage _Storage;
         [SetUp]
         public void Setup()
         {
-            _Storage = Storage.FTP.Build("ftp://192.168.10.204", "inspack", "123456@q");
         }
 
         [Test]
         public void ConnectRemoteFTP()
         {
-            Assert.IsNotNull(_Storage);
+            using (var _Storage = Storage.FTP.Build("ftp://192.168.10.204", "inspack", "123456@q"))
+            {
+                Assert.IsNotNull(_Storage);
+            }
+
             Assert.Pass();
         }
 
@@ -31,17 +33,21 @@ namespace Test.Vinci.FileSaver
         {
             var id = "";
             long length = 0;
-            using (var file = File.OpenRead("userMgr.ico"))
+            using (var _Storage = Storage.FTP.Build("ftp://192.168.10.204", "inspack", "123456@q"))
             {
-                length = file.Length;
-                id = _Storage.SaveFile(file, "ico", null, "userMgr");
+                using (var file = File.OpenRead("userMgr.ico"))
+                {
+                    length = file.Length;
+                    id = _Storage.SaveFile(file, "ico", null, "userMgr");
+                }
+                Assert.AreEqual("path:userMgr.ico", id);
+
+
+                var resultStream = _Storage.GetFile(id);
+                Assert.IsNotNull(resultStream);
+                Assert.AreEqual(length, resultStream.Length);
             }
-            Assert.AreEqual("path:userMgr.ico", id);
 
-
-            var resultStream = _Storage.GetFile(id);
-            Assert.IsNotNull(resultStream);
-            Assert.AreEqual(length, resultStream.Length);
             Assert.Pass();
         }
 
@@ -50,18 +56,21 @@ namespace Test.Vinci.FileSaver
         {
             var id = "";
             long length = 0;
-            var dir = new DirectoryInfo("FileSaver.FTPStorage");
-            using (var file = File.OpenRead("userMgr.ico"))
+            using (var _Storage = Storage.FTP.Build("ftp://192.168.10.204", "inspack", "123456@q"))
             {
-                length = file.Length;
-                id = _Storage.SaveFile(file, "ico", dir, "userMgr");
+                var dir = new DirectoryInfo("FileSaver.FTPStorage");
+                using (var file = File.OpenRead("userMgr.ico"))
+                {
+                    length = file.Length;
+                    id = _Storage.SaveFile(file, "ico", dir, "userMgr");
+                }
+                Assert.AreEqual("path:userMgr.ico", id);
+
+
+                var resultStream = _Storage.GetFile(id, dir);
+                Assert.IsNotNull(resultStream);
+                Assert.AreEqual(length, resultStream.Length);
             }
-            Assert.AreEqual("path:userMgr.ico", id);
-
-
-            var resultStream = _Storage.GetFile(id, dir);
-            Assert.IsNotNull(resultStream);
-            Assert.AreEqual(length, resultStream.Length);
             Assert.Pass();
         }
     }

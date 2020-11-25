@@ -51,7 +51,9 @@ namespace Vinci.FileSaver
                 var id = Storage.PathHelper.GetPathId();
                 dir = Storage.PathHelper.GetDictionary(dir, id);
                 var format = GetImgFormat(img, extension);
-                img.Save(Path.Combine(dir.FullName, $"{id}.{extension}"), format);
+                var path = Path.Combine(dir.FullName, $"{id}.{extension}");
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                img.Save(path, format);
                 return $"id:{id}";
             }
             else
@@ -60,6 +62,7 @@ namespace Vinci.FileSaver
                 dir = new FileInfo(path).Directory;
                 if (!dir.Exists) { dir.Create(); }
                 var format = GetImgFormat(img, extension);
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
                 img.Save(path, format);
                 return $"path:{filePath}";
             }
@@ -315,7 +318,7 @@ namespace Vinci.FileSaver
         /// <param name="idOrPath"></param>
         /// <param name="rootDir"></param>
         /// <returns></returns>
-        public bool Exist(string idOrPath,  DirectoryInfo rootDir = null)
+        public bool Exist(string idOrPath, DirectoryInfo rootDir = null)
         {
             var dir = RootDirectory;
             if (rootDir != null)
@@ -335,6 +338,11 @@ namespace Vinci.FileSaver
             }
             files = dir.GetFiles($"{realName}.*");
             return files.Length > 0;
+
+        }
+
+        public void Dispose()
+        {
 
         }
 

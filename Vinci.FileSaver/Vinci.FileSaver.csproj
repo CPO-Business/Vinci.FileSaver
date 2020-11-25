@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>netstandard2.0</TargetFramework>
 		<Description>
 			the dll can help developer saving files, image, and can geting files by id returned from saving function.
 		</Description>
 		<Authors>
 			Quick Xavier
 		</Authors>
-	<Version>0.0.0.16</Version></PropertyGroup>
+	<Version>0.0.0.19</Version></PropertyGroup>
 	<Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
 		<ItemGroup>
 			<None Include="**\*.cs" Pack="True" PackagePath="src" />
